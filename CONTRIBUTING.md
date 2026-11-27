@@ -44,8 +44,8 @@ git checkout -b <branch-name>
 ```
 
 Branch naming patterns:
-- **`module/<feature-name>`**: For all feature implementations and module developments.
-  - *Examples:* `module/placement`, `module/reports`, `module/company-partnerships`, `module/auth`
+- **`feature/<feature-name>`**: For all new features, user stories, and enhancements.
+  - *Examples:* `feature/placement-allocation`, `feature/weekly-reports-submission`, `feature/company-capacity`, `feature/auth-jwt`
 - **`fix/<name>`**: For functionality fixes and bug repairs.
   - *Examples:* `fix/jwt-expiration`, `fix/report-upload`, `fix/evaluations-score`
 
