@@ -121,7 +121,7 @@ This project is developed by a 10-person engineering team adhering to strict pro
 
 - **Branching Strategy:**
   - `main`: Production / presentation branch.
-  - `dev`: Active integration branch.
+  - `develop`: Active integration branch.
   - `feature/<feature-name>`: For new feature implementation.
   - `fix/<name>`: For bug fixes.
 - **Commit Rules:** We strictly follow [Conventional Commits](https://www.conventionalcommits.org/) (e.g. `feat(auth): ...`, `fix(placement): ...`).

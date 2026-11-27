@@ -45,7 +45,7 @@
 
 ## Developer Self-Checklist
 Before requesting review, please confirm:
-- [ ] My branch is up to date with `dev`.
+- [ ] My branch is up to date with `develop`.
 - [ ] Code follows the modular vertical-slice structure (no unauthorized inter-module coupling).
 - [ ] TypeScript compiles cleanly with no type errors (`npm run build` or `npm run type-check`).
 - [ ] No sensitive credentials, keys, or `.env` files are committed.
@@ -56,4 +56,4 @@ Before requesting review, please confirm:
 ## Sign-Offs & Approvals
 - [ ] **Peer Reviewer:** Code reviewed and approved (clean code, architecture adhered).
 - [ ] **QA Engineer:** Acceptance criteria and test steps verified.
-- [ ] **Project Manager (PM):** Final review and approval to merge into `dev`.
+- [ ] **Project Manager (PM):** Final review and approval to merge into `develop`.

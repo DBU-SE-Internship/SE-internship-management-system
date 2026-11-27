@@ -32,14 +32,14 @@ We use a modified **Trunk-Based / GitFlow Hybrid** branching strategy:
 
 ### Branch Structure
 - **`main`**: Production & presentation-ready branch. Only the PM can merge into `main` after milestone completion and QA regression testing.
-- **`dev`**: The active integration branch. All reviewed and QA-tested feature branches are merged here.
-- **Feature Branches**: Created off `dev` for specific tasks, user stories, or bug fixes.
+- **`develop`**: The active integration branch. All reviewed and QA-tested feature branches are merged here.
+- **Feature Branches**: Created off `develop` for specific tasks, user stories, or bug fixes.
 
 ### Branch Naming Conventions
-Always branch off the latest `dev`:
+Always branch off the latest `develop`:
 ```bash
-git checkout dev
-git pull origin dev
+git checkout develop
+git pull origin develop
 git checkout -b <branch-name>
 ```
 
@@ -96,21 +96,21 @@ Scopes must reflect the functional module or layer:
 
 ## 4. Pull Request (PR) Lifecycle
 
-To maintain quality and stability, **no code is merged directly into `dev` or `main` without a Pull Request**.
+To maintain quality and stability, **no code is merged directly into `develop` or `main` without a Pull Request**.
 
 ### Steps to Submit a PR:
-1. **Rebase or Merge `dev`:** Before opening a PR, ensure your branch is up-to-date with `dev`:
+1. **Rebase or Merge `develop`:** Before opening a PR, ensure your branch is up-to-date with `develop`:
    ```bash
-   git checkout dev
-   git pull origin dev
+   git checkout develop
+   git pull origin develop
    git checkout <your-branch>
-   git merge dev
+   git merge develop
    ```
 2. **Local Verification:** Verify that:
    - TypeScript compiles with zero errors (`npm run build` or `npm run type-check`).
    - The app runs cleanly without crashing.
    - Code is formatted.
-3. **Open PR against `dev`:**
+3. **Open PR against `develop`:**
    - Use the pre-configured **Pull Request Template**.
    - Provide clear, step-by-step **QA Verification Steps** with test credentials/roles.
 4. **Review & Sign-Off Requirement:**
