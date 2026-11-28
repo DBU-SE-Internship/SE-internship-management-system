@@ -1,0 +1,120 @@
+// Prisma Configuration for SEIMS (Software Engineering Internship Management System)
+// Database: PostgreSQL
+// Authentication: Better Auth with Prisma Adapter
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// -----------------------------------------------------------------------------
+// ENUMS
+// -----------------------------------------------------------------------------
+
+enum Role {
+  DEPARTMENT_HEAD
+  STUDENT
+  MENTOR
+  COMPANY_REP
+  SUPERVISOR
+  DEFENSE_COMMITTEE
+}
+
+enum PortalType {
+  INSIDER  // DBU members (Students, Mentors, Department Head, Defense Committee)
+  OUTSIDER // External industry partners (Company Reps, Supervisors)
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  PENDING_PASSWORD_CHANGE
+}
+
+// -----------------------------------------------------------------------------
+// BETTER AUTH & USER MANAGEMENT MODELS
+// -----------------------------------------------------------------------------
+
+model User {
+  id            String     @id @default(cuid())
+  name          String
+  email         String     @unique
+  emailVerified Boolean    @default(false)
+  image         String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  // Custom SEIMS Domain Fields
+  identifier    String     @unique // Student ID (e.g. UGR/1234/14), Staff ID, or Corporate ID
+  role          Role       @default(STUDENT)
+  portalType    PortalType @default(INSIDER)
+  status        UserStatus @default(PENDING_PASSWORD_CHANGE)
+  phoneNumber   String?
+  companyId     String?
+
+  // Closed Onboarding Audit Trail (Who registered/provisioned this account)
+  createdById      String?
+  creator          User?      @relation("UserProvisioner", fields: [createdById], references: [id])
+  provisionedUsers User[]     @relation("UserProvisioner")
+
+  // Better Auth Core Relations
+  sessions      Session[]
+  accounts      Account[]
+
+  @@index([role])
+  @@index([portalType])
+  @@index([status])
+  @@index([companyId])
+  @@map("users")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model Account {
+  id                    String    @id @default(cuid())
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("accounts")
+}
+
+model Verification {
+  id         String    @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime? @default(now())
+  updatedAt  DateTime? @updatedAt
+
+  @@index([identifier])
+  @@map("verifications")
+}
