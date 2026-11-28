@@ -2,18 +2,19 @@
 
 This document details the functional requirements for the **Software Engineering Internship Management System (SEIMS)** based directly on the approved baseline specifications. 
 
-Requirements are grouped by actor with unique identifiers (`FR-<ACTOR>-<ID>`) to support traceability across development, testing, and QA verification.
+Requirements are grouped by actor and functional area with unique identifiers (`FR-<SCOPE>-<ID>`) to support traceability across development, testing, and QA verification.
 
 ---
 
 ## 1. System Actors
 
-The functional requirements cover the following five primary system actors:
+The functional requirements cover the following primary system actors:
 1. **Department Head (DH)**
 2. **Student (ST)**
 3. **Mentor (MN)** *(Academic Advisor)*
 4. **Company Representative (CR)**
 5. **Supervisor (SP)** *(Industry Workplace Supervisor)*
+6. **Defense Committee (DC)**
 
 ---
 
@@ -99,27 +100,52 @@ The functional requirements cover the following five primary system actors:
 
 ---
 
-## 3. Requirements Summary Matrix
+### 2.6 Defense Committee (`FR-DC`)
 
-| Requirement Area | DH | ST | MN | CR | SP |
-| :--- | :---: | :---: | :---: | :---: | :---: |
-| **Authentication (Login / Logout)** | ✓ | ✓ | ✓ | ✓ | ✓ |
-| **Registration (Students, Mentors, Companies)** | ✓ | | | | |
-| **Company Capacity & Criteria Publishing** | | | | ✓ | |
-| **Student Company Request / Application** | | ✓ | | | |
-| **Student Assignment to Company** | ✓ | | | | |
-| **Supervisor Management & Assignment** | | | | ✓ | |
-| **Mentor Assignment & Management** | ✓ | | | | |
-| **Task Assignment & Tracking** | | ✓ | ✓ | | ✓ |
-| **Report Submission (Interim / Final / Weekly)** | | ✓ | | | |
-| **Report Review & Comments** | | | ✓ | | ✓ |
-| **Student Attendance Management** | ✓ | | | | ✓ |
-| **Student Analytics & Work Progress** | | | ✓ | | |
-| **Supervisor Reports to Dept Head** | | | | | ✓ |
-| **Defense Committee & Defense Rooms** | ✓ | | | | |
-| **Academic & Defense Schedules** | | ✓ | | | |
-| **Grades / Marks Viewing** | | ✓ | | | |
-| **Appeals Against Decisions** | | ✓ | | | |
-| **Partnership Management** | ✓ | | | | |
-| **User Activation / Deactivation** | ✓ | | | | |
-| **Notifications** | | ✓ | ✓ | ✓ | ✓ |
+| ID | Requirement | Description |
+| :--- | :--- | :--- |
+| **FR-DC-01** | **View Assigned Room** | The Defense Committee member can view their assigned defense room and venue details. |
+| **FR-DC-02** | **View Assigned Student's Documents & Project** | The Defense Committee member can access and inspect assigned students' submitted documents, final reports, and project materials. |
+| **FR-DC-03** | **View Defense Schedule** | The Defense Committee member can view the scheduled timetable and defense dates for students. |
+| **FR-DC-04** | **Evaluate & Grade Students** | The Defense Committee member can evaluate student defenses and assign grades/marks based on standardized departmental evaluation criteria. |
+
+---
+
+## 3. Authentication & Access Control Requirements (`FR-AUTH`)
+
+| ID | Requirement | Description |
+| :--- | :--- | :--- |
+| **FR-AUTH-01** | **Login** | Secure authentication and session initiation for all authorized system users. |
+| **FR-AUTH-02** | **Register** | Account creation flow for designated stakeholders. |
+| **FR-AUTH-03** | **Forgot Password** | Secure password reset and recovery mechanism for registered accounts. |
+| **FR-AUTH-04** | **Dual Authentication Portals** | Dedicated, separate authentication entry points for **Insiders** (DBU members: Students, Mentors, Department Head, Defense Committee) and **Outsiders** (Company Partners: Company Representatives, Supervisors). |
+
+---
+
+## 4. Requirements Summary Matrix
+
+| Requirement Area | DH | ST | MN | CR | SP | DC |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Authentication (Login / Logout / Forgot Password)** | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| **Separate Auth Portal (Insiders vs. Outsiders)** | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| **Registration (Students, Mentors, Companies)** | ✓ | | | | | |
+| **Company Capacity & Criteria Publishing** | | | | ✓ | | |
+| **Student Company Request / Application** | | ✓ | | | | |
+| **Student Assignment to Company** | ✓ | | | | | |
+| **Supervisor Management & Assignment** | | | | ✓ | | |
+| **Mentor Assignment & Management** | ✓ | | | | | |
+| **Task Assignment & Tracking** | | ✓ | ✓ | | ✓ | |
+| **Report Submission (Interim / Final / Weekly)** | | ✓ | | | | |
+| **Report Review & Comments** | | | ✓ | | ✓ | |
+| **Student Attendance Management** | ✓ | | | | ✓ | |
+| **Student Analytics & Work Progress** | | | ✓ | | | |
+| **Supervisor Reports to Dept Head** | | | | | ✓ | |
+| **Defense Committee & Room Assignment/Creation** | ✓ | | | | | |
+| **Defense Room & Documents Viewing** | | | | | | ✓ |
+| **Defense Evaluation & Grading** | | | | | | ✓ |
+| **Academic & Defense Schedules** | | ✓ | | | | ✓ |
+| **Grades / Marks Viewing** | | ✓ | | | | |
+| **Appeals Against Decisions** | | ✓ | | | | |
+| **Partnership Management** | ✓ | | | | | |
+| **User Activation / Deactivation** | ✓ | | | | | |
+| **Notifications** | | ✓ | ✓ | ✓ | ✓ | |
