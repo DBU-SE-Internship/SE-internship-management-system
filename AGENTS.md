@@ -140,7 +140,45 @@ When building endpoints or UI views:
 
 ---
 
-## 6. Git Hygiene for Agents
+## 6. Reusability, Shared Types & Code Quality Directives
+
+To maintain a clean codebase across 10 developers, all agents must prioritize code reusability and adhere to these quality standards:
+
+### A. Search Before Implementing (Zero Duplicate Components)
+- **Always search before creating:** Before implementing any UI component, hook, or utility, check if it already exists:
+  - Base UI Primitives: Check `client/components/ui/` (Buttons, Modals, Inputs, Tables, Badges, Tabs, Cards).
+  - Feedback & Status: Check `client/components/feedback/` (Spinners, Empty States, Error Boundaries).
+  - Shared Helpers: Check `client/lib/utils.ts` (`cn`, date formatters, enum formatters).
+  - Reusable Types: Check `client/types/` (`api.types.ts`, `auth.types.ts`, `common.types.ts`).
+- **Reuse first:** If a suitable component exists, import and extend it. **Never** create duplicate buttons, inputs, or modal containers inside feature folders.
+
+### B. Promote Cross-Feature Elements (The Rule of Two)
+- If a component, helper, or hook is needed by **two or more features**:
+  - **Do NOT** copy-paste it between `client/features/A/` and `client/features/B/`.
+  - Elevate it immediately to the shared level:
+    - Shared UI $\rightarrow$ `client/components/ui/` or `client/components/feedback/`
+    - Shared Utility $\rightarrow$ `client/lib/utils.ts`
+    - Shared Hook $\rightarrow$ `client/hooks/`
+    - Shared Type $\rightarrow$ `client/types/`
+
+### C. Standardized Type Management
+- **Shared Domain & API Types:** Enums (`Role`, `PortalType`, `UserStatus`), user profiles, pagination parameters, and API envelope wrappers (`ApiResponse<T>`, `PaginatedResponse<T>`) MUST be imported from `@/types/`. Never redeclare them locally.
+- **Feature-Specific DTOs:** Types strictly unique to a single feature (e.g. `WeeklyReportSubmissionDTO`, `DefenseRubricScorePayload`) belong in `client/features/<module-name>/types/`.
+
+### D. Centralized Infrastructure Usage
+- **API Fetching:** Always use `apiClient` from `@/lib/api-client`. Do **NOT** use raw `fetch()` or separate axios instances.
+- **Tailwind Class Merging:** Always use `cn(...)` from `@/lib/utils` for conditional class names. Never use string concatenation.
+- **Role Gatekeeping:** Always use `<RoleGuard allowedRoles={[...]}>` from `@/components/auth/role-guard` to show/hide action buttons or widgets based on user permissions.
+- **Authentication:** Use `useSession()`, `signIn`, and `signOut` from `@/lib/auth-client`.
+
+### E. Frontend Quality & UX Best Practices
+1. **Loading & Empty States:** Every data table or list must render a loading skeleton/spinner during fetching and a clean `<EmptyState />` when no records exist.
+2. **Form Validation with Zod:** Every form must use `react-hook-form` paired with `@hookform/resolvers/zod`. Field-level error messages must be visible.
+3. **Toast Notifications:** Provide user-friendly feedback on mutations (success notifications on create/update, clear error alerts on failure).
+
+---
+
+## 7. Git Hygiene for Agents
 
 - **Do NOT** touch `.env` or commit API keys/passwords.
 - **Do NOT** create arbitrary files or directories in the project root.
