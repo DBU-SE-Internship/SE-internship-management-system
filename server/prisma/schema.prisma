@@ -1,0 +1,99 @@
+// Prisma Configuration for SEIMS (Software Engineering Internship Management System)
+// Database: PostgreSQL
+// ID Strategy: cuid()
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// -----------------------------------------------------------------------------
+// ENUMS
+// -----------------------------------------------------------------------------
+
+enum Role {
+  DEPARTMENT_HEAD
+  STUDENT
+  MENTOR
+  COMPANY_REP
+  SUPERVISOR
+  DEFENSE_COMMITTEE
+}
+
+enum PortalType {
+  INSIDER  // DBU members (Students, Mentors, Department Head, Defense Committee)
+  OUTSIDER // External industry partners (Company Reps, Supervisors)
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  PENDING_PASSWORD_CHANGE // Newly provisioned users required to set password on first login
+}
+
+// -----------------------------------------------------------------------------
+// CORE AUTHENTICATION & USER MANAGEMENT
+// -----------------------------------------------------------------------------
+
+model User {
+  id                  String               @id @default(cuid())
+  identifier          String               @unique // Student ID (e.g. UGR/1234/14), Staff ID, or Corporate ID
+  email               String               @unique
+  passwordHash        String
+  fullName            String
+  phoneNumber         String?
+  portalType          PortalType
+  role                Role
+  status              UserStatus           @default(PENDING_PASSWORD_CHANGE)
+
+  // Company Association (for Company Rep & Supervisors)
+  companyId           String?
+
+  // Closed Onboarding Audit Trail (Who provisioned this account)
+  createdById         String?
+  creator             User?                @relation("UserProvisioner", fields: [createdById], references: [id])
+  provisionedUsers    User[]               @relation("UserProvisioner")
+
+  // Authentication & Session Tokens
+  passwordResetTokens PasswordResetToken[]
+  refreshTokens       RefreshToken[]
+
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+
+  @@index([role])
+  @@index([portalType])
+  @@index([status])
+  @@index([companyId])
+  @@map("users")
+}
+
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String    @unique
+  expiresAt DateTime  // 30-minute validity window
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+  @@map("password_reset_tokens")
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String   @unique
+  expiresAt DateTime
+  revoked   Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@map("refresh_tokens")
+}
