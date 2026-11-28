@@ -40,19 +40,58 @@ The functional requirements cover the following primary system actors:
 
 ### 2.2 Student (`FR-ST`)
 
+The Student is a primary actor in SEIMS responsible for participating in the
+internship process, requesting available internship opportunities, completing
+assigned tasks, submitting internship reports, and fulfilling academic
+internship requirements.
+
+#### 2.2.1 Student Functional Requirements
+
 | ID | Requirement | Description |
 | :--- | :--- | :--- |
-| **FR-ST-01** | **Login** | The Student can securely log in using their credentials. |
-| **FR-ST-02** | **Logout** | The Student can securely terminate their session. |
-| **FR-ST-03** | **View Companies & Request/Apply** | The Student can view available companies and submit internship requests/applications. |
-| **FR-ST-04** | **Upload Reports (Interim & Final)** | The Student can upload interim reports and final internship reports for their supervisor and mentor to review. |
-| **FR-ST-05** | **View Tasks** | The Student can view assigned tasks and work assigned to them. |
-| **FR-ST-06** | **View Assigned Company & Supervisor** | The Student can view their officially assigned company details and industry supervisor. |
-| **FR-ST-07** | **View Assigned Mentor** | The Student can view their assigned academic mentor's details. |
-| **FR-ST-08** | **Get Notifications** | The Student receives system notifications regarding application status, assignments, reviews, and schedules. |
-| **FR-ST-09** | **Appeal Against Decision** | The Student can submit an appeal against decisions regarding placement, evaluation, or other determinations. |
-| **FR-ST-10** | **View Grade / Mark** | The Student can view their evaluations, grades, and marks. |
-| **FR-ST-11** | **View Schedules** | The Student can view academic schedules and defense schedules. |
+| **FR-ST-01** | **Student Registration** | The system shall allow only the Department Head to register students by providing their required academic and personal information. |
+| **FR-ST-02** | **Login** | The Student shall be able to securely log in using registered account credentials. |
+| **FR-ST-03** | **Manage Profile and Account Settings** | The Student shall be able to view and update permitted personal information and change their account password. |
+| **FR-ST-04** | **Logout** | The Student shall be able to securely terminate their active session. |
+| **FR-ST-05** | **View Available Internship Opportunities** | The Student shall be able to view internship opportunities announced by Company Representatives and approved and published by the Department Head. Information shall include company details, available positions, eligibility criteria, requirements, and application deadlines. |
+| **FR-ST-06** | **Request Internship Placement** | The Student shall be able to submit an internship placement request to the Department Head based on their interests, qualifications, and the published internship requirements. |
+| **FR-ST-07** | **View Placement Request Status** | The Student shall be able to track the status and decisions of submitted internship placement requests. |
+| **FR-ST-08** | **View Assigned Internship Placement** | The Student shall be able to view the officially assigned internship company and placement details determined by the Department Head. |
+| **FR-ST-09** | **View Assigned Academic Advisor** | The Student shall be able to view information about their assigned academic advisor (Mentor). |
+| **FR-ST-10** | **View Assigned Industry Supervisor** | The Student shall be able to view information about their assigned industry workplace Supervisor. |
+| **FR-ST-11** | **View Assigned Tasks** | The Student shall be able to view tasks assigned by the industry Supervisor, including descriptions, instructions, deadlines, and task status. |
+| **FR-ST-12** | **Submit Weekly Internship Reports** | The Student shall be able to prepare and electronically submit weekly internship reports describing completed activities, assigned tasks, challenges, and progress for independent review by the academic advisor and industry Supervisor. |
+| **FR-ST-13** | **Submit Final Internship Documents** | The Student shall be able to upload and submit required final internship documents to the assigned academic advisor for review and approval before the defense. |
+| **FR-ST-14** | **View Industry Supervisor Feedback** | The Student shall be able to view feedback, comments, corrections, and recommendations independently provided by the industry Supervisor regarding assigned tasks, reports, and workplace performance. |
+| **FR-ST-15** | **View Academic Advisor Feedback** | The Student shall be able to view feedback, comments, corrections, and recommendations independently provided by the academic advisor regarding academic progress, weekly reports, and final documents. |
+| **FR-ST-16** | **View Official Grades and Evaluation Results** | The Student shall be able to view evaluation results, marks, and final grades submitted by the industry Supervisor, academic advisor, and defense committee only after official publication by authorized department personnel. |
+| **FR-ST-17** | **Submit Appeals** | The Student shall be able to submit appeals against decisions concerning internship placement, evaluation, grades, or other internship-related determinations and track their resolution status. |
+| **FR-ST-18** | **View Internship Schedules** | The Student shall be able to view internship-related schedules, including supervision visits, report submission deadlines, final document submission deadlines, and defense dates. |
+| **FR-ST-19** | **Receive Notifications** | The Student shall receive system notifications regarding placement decisions, assignments, task updates, report feedback, document reviews, published grades, appeals, and important internship schedules. |
+
+#### 2.2.2 Student Dashboard
+
+The system shall provide Students with a centralized dashboard containing:
+
+1. Internship application and placement status.
+2. Assigned company and industry Supervisor information.
+3. Assigned academic advisor information.
+4. Assigned tasks and deadlines.
+5. Weekly report submission status.
+6. Academic advisor and industry Supervisor feedback.
+7. Final document submission and review status.
+8. Officially published evaluation results and grades.
+9. Internship supervision and defense schedules.
+10. Notifications and appeal status.
+
+#### 2.2.3 Student Access Restrictions
+
+- Students shall only access their own internship records and academic information.
+- Students shall not register their own accounts.
+- Students shall not approve their own placement requests.
+- Students shall not modify submitted evaluations or grades.
+- Students shall only access grades after official publication.
+- Students shall only access information and operations authorized by their assigned system role.
 
 ---
 
