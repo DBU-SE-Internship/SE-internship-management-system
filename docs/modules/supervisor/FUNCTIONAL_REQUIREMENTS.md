@@ -9,7 +9,7 @@
 | **Module** | Workplace Supervisor Module |
 | **Actor** | Workplace Supervisor (`SUPERVISOR`) |
 | **Status** | Active Specification |
-| **Scope** | Dashboard, Assigned Students, Task Management & Review, Grading , Daily Attendance & Absence Alerts, Final Report & Feedback, Advisor Progress Updates, Supervision Visit Responses, Direct Messaging & Notifications |
+| **Scope** | Dashboard, Assigned Students, Task Management & Review, Grading, Daily Attendance & Absence Alerts, Report Feedback & Final Report (to Dept Head), Advisor Visibility, Supervision Visit Responses, Direct Messaging & Notifications |
 
 > **Note:** Like all other system actors, the Workplace Supervisor must also be able to log in and log out of the system securely via shared authentication.
 
@@ -23,7 +23,7 @@
 - [FR-4: Supervisor Evaluation & Percentage Calculation](#fr-4-supervisor-evaluation--percentage-calculation)
 - [FR-5: Daily Attendance Management & Absence Alerts](#fr-5-daily-attendance-management--absence-alerts)
 - [FR-6: Report Feedback & Final Internship Report](#fr-6-report-feedback--final-internship-report)
-- [FR-7: Academic Advisor Progress Updates & Visibility](#fr-7-academic-advisor-progress-updates--visibility)
+- [FR-7: Academic Advisor Visibility (Tasks & Attendance)](#fr-7-academic-advisor-visibility-tasks--attendance)
 - [FR-8: Supervision Visit Responses](#fr-8-supervision-visit-responses)
 - [FR-9: Direct Messaging with Academic Advisor](#fr-9-direct-messaging-with-academic-advisor)
 - [FR-10: In-App Notifications](#fr-10-in-app-notifications)
@@ -38,7 +38,7 @@
 | **FR-1.2** | The system shall allow the supervisor to navigate from the dashboard summary cards directly to the assigned students list, pending task reviews, attendance records, and evaluations. |
 | **FR-1.3** | The system shall display the count of student task submissions awaiting the supervisor's review. |
 | **FR-1.4** | The system shall highlight assigned students who have reached the **5 total `ABSENT` days** threshold. |
-| **FR-1.5** | The system shall display upcoming or pending company supervision visits scheduled by Academic Advisors, along with pending progress update requests and unread messages. |
+| **FR-1.5** | The system shall display upcoming or pending company supervision visits scheduled by Academic Advisors, along with unread direct messages. |
 
 ---
 
@@ -105,13 +105,13 @@
 
 ---
 
-## FR-7: Academic Advisor Progress Updates & Visibility
+## FR-7: Academic Advisor Visibility (Tasks & Attendance)
+
+> **Note:** Academic Advisors review weekly/midterm/final reports submitted directly by the **Student**, not submitted by the Workplace Supervisor.
 
 | ID | Requirement |
 | :--- | :--- |
 | **FR-7.1** | The system shall make each assigned student's weekly progress on supervisor-assigned tasks (task statuses, submission progress, scores, and attendance summaries) visible to the student's Academic Advisor. |
-| **FR-7.2** | The system shall allow the supervisor to receive and view internship progress update requests sent by an assigned student's Academic Advisor. |
-| **FR-7.3** | The system shall allow the supervisor to submit a progress update response to the requesting Academic Advisor so the advisor can review the student's current workplace progress. |
 
 ---
 
@@ -141,6 +141,6 @@
 | :--- | :--- |
 | **FR-10.1** | The system shall notify the supervisor when an assigned student submits or resubmits a task. |
 | **FR-10.2** | The system shall notify the supervisor when an Academic Advisor schedules, reschedules, or cancels a company supervision visit. |
-| **FR-10.3** | The system shall notify the supervisor when an Academic Advisor sends a progress update request or a new direct message. |
-| **FR-10.4** | The system shall trigger notifications to the relevant stakeholders when the supervisor assigns a task, reviews/returns a task with feedback, records a student reaching **5 total `ABSENT` days** (or attendance warnings), responds to a supervision visit, submits the final evaluation, or submits the Final Internship Report. |
-| **FR-10.5** | The system shall allow the supervisor to view received notifications and navigate directly to the related student, task, visit, request, or message. |
+| **FR-10.3** | The system shall notify the supervisor when an Academic Advisor sends a new direct message. |
+| **FR-10.4** | The system shall trigger notifications to the relevant stakeholders when the supervisor assigns a task, reviews/returns a task with feedback, records a student reaching **5 total `ABSENT` days** (or attendance warnings), responds to a supervision visit, submits the final evaluation, or submits the Final Internship Report to the Department Head. |
+| **FR-10.5** | The system shall allow the supervisor to view received notifications and navigate directly to the related student, task, visit, or message. |
