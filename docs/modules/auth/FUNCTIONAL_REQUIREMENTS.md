@@ -142,7 +142,7 @@ To ensure clean credential separation, tailored branding, and security boundarie
   - The user inputs their registered email address.
   - System Security Handling:
     - To prevent user enumeration, the UI returns a generic confirmation message regardless of whether the email exists.
-    - If the email is registered and active, a single-use, time-limited password reset token (valid for 30 minutes) is generated and dispatched via email.
+    - If the email is registered and active, a single-use, time-limited password reset token (valid for 15 minutes or less) is generated and dispatched via email.
     - The reset link directs the user to a secure password reset form where they can define a new password.
     - Once utilized or expired, the reset token is invalidated immediately.
 
