@@ -1,6 +1,6 @@
 // Prisma Configuration for SEIMS (Software Engineering Internship Management System)
 // Database: PostgreSQL
-// ID Strategy: cuid()
+// Authentication: Better Auth with Prisma Adapter
 
 generator client {
   provider = "prisma-client-js"
@@ -32,38 +32,38 @@ enum PortalType {
 enum UserStatus {
   ACTIVE
   INACTIVE
-  PENDING_PASSWORD_CHANGE // Newly provisioned users required to set password on first login
+  PENDING_PASSWORD_CHANGE
 }
 
 // -----------------------------------------------------------------------------
-// CORE AUTHENTICATION & USER MANAGEMENT
+// BETTER AUTH & USER MANAGEMENT MODELS
 // -----------------------------------------------------------------------------
 
 model User {
-  id                  String               @id @default(cuid())
-  identifier          String               @unique // Student ID (e.g. UGR/1234/14), Staff ID, or Corporate ID
-  email               String               @unique
-  passwordHash        String
-  fullName            String
-  phoneNumber         String?
-  portalType          PortalType
-  role                Role
-  status              UserStatus           @default(PENDING_PASSWORD_CHANGE)
+  id            String     @id @default(cuid())
+  name          String
+  email         String     @unique
+  emailVerified Boolean    @default(false)
+  image         String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
 
-  // Company Association (for Company Rep & Supervisors)
-  companyId           String?
+  // Custom SEIMS Domain Fields
+  identifier    String     @unique // Student ID (e.g. UGR/1234/14), Staff ID, or Corporate ID
+  role          Role       @default(STUDENT)
+  portalType    PortalType @default(INSIDER)
+  status        UserStatus @default(PENDING_PASSWORD_CHANGE)
+  phoneNumber   String?
+  companyId     String?
 
-  // Closed Onboarding Audit Trail (Who provisioned this account)
-  createdById         String?
-  creator             User?                @relation("UserProvisioner", fields: [createdById], references: [id])
-  provisionedUsers    User[]               @relation("UserProvisioner")
+  // Closed Onboarding Audit Trail (Who registered/provisioned this account)
+  createdById      String?
+  creator          User?      @relation("UserProvisioner", fields: [createdById], references: [id])
+  provisionedUsers User[]     @relation("UserProvisioner")
 
-  // Authentication & Session Tokens
-  passwordResetTokens PasswordResetToken[]
-  refreshTokens       RefreshToken[]
-
-  createdAt           DateTime             @default(now())
-  updatedAt           DateTime             @updatedAt
+  // Better Auth Core Relations
+  sessions      Session[]
+  accounts      Account[]
 
   @@index([role])
   @@index([portalType])
@@ -72,28 +72,49 @@ model User {
   @@map("users")
 }
 
-model PasswordResetToken {
-  id        String    @id @default(cuid())
-  userId    String
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  tokenHash String    @unique
-  expiresAt DateTime  // 30-minute validity window
-  usedAt    DateTime?
-  createdAt DateTime  @default(now())
-
-  @@index([userId])
-  @@map("password_reset_tokens")
-}
-
-model RefreshToken {
+model Session {
   id        String   @id @default(cuid())
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  tokenHash String   @unique
-  expiresAt DateTime
-  revoked   Boolean  @default(false)
-  createdAt DateTime @default(now())
 
   @@index([userId])
-  @@map("refresh_tokens")
+  @@map("sessions")
+}
+
+model Account {
+  id                    String    @id @default(cuid())
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("accounts")
+}
+
+model Verification {
+  id         String    @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime? @default(now())
+  updatedAt  DateTime? @updatedAt
+
+  @@index([identifier])
+  @@map("verifications")
 }
