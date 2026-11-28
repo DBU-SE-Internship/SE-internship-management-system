@@ -49,7 +49,7 @@ The **Defense Committee Module** provides defense evaluators and panel members w
   - The system must present an organized schedule of assigned candidates ordered by time slot.
   - For each scheduled defense, the timetable must display:
     - Scheduled date, start time, and end time (e.g., 09:00 – 09:45).
-    - Student Full Name and University Student ID (e.g., `UGR/1234/14`).
+    - Student Full Name and University Student ID (e.g., `DBU1601...`).
     - Hosting Company / Organization name where the internship was undertaken.
     - Project / Internship Title.
     - Assigned Academic Mentor name.
@@ -93,42 +93,37 @@ The **Defense Committee Module** provides defense evaluators and panel members w
 
 ---
 
-### DC-FR-05: Standardized Rubric Evaluation & Scoring
+### DC-FR-05: Department Rubric Evaluation & Numerical Scoring
 *Traceable to: Global `FR-DC-04`*
 
-- **User Story:** As a Defense Committee member, I want to grade the student against predefined departmental criteria so that evaluations remain objective, transparent, and fair.
+- **User Story:** As a Defense Committee member, I want to evaluate a candidate by inputting numerical marks against the department's evaluation rubric so that the student receives an accurate, objective score.
 - **Detailed Description:**
-  - The system must provide a standardized scoring sheet based on departmental evaluation criteria:
-    1. **Presentation Quality & Communication (15%):** Clarity of slides, time management, verbal presentation.
-    2. **Technical Understanding & Depth (25%):** Grasp of software engineering concepts, system architecture, methodology.
-    3. **Practical Implementation / Project Demo (40%):** Functional completeness of the project, quality of artifacts, problem solved.
-    4. **Q&A Defense & Critical Thinking (20%):** Ability to defend technical design choices and answer committee questions.
-  - Form Features:
-    - Real-time score tallying (calculates total percentage out of 100 as numbers are typed).
-    - Validation prevents entering values outside the min/max bounds for each criterion.
-    - Mandatory qualitative comments field: Evaluator remarks, identified strengths, and recommended improvements.
-- **Pre-conditions:** Candidate status is marked `Present`.
-- **Post-conditions:** Generates a defense evaluation record associated with the student, committee member, and session.
+  - The system dynamically displays the standardized evaluation rubric and criteria configured by the department.
+  - For each rubric criterion defined by the department, the committee member enters an awarded numerical score.
+  - Form Features & Validation:
+    - Displays each criterion name, description, and maximum permissible score.
+    - Validates that each entered score is a valid number within `[0, criterionMaxScore]`.
+    - Real-time tallying: Automatically sums and calculates the total numerical grade as marks are entered.
+    - Evaluator Remarks: Provides a feedback text area for written comments and evaluation notes regarding the defense.
+- **Pre-conditions:** Candidate status is marked `Present` and the department rubric is loaded for the defense session.
+- **Post-conditions:** Generates a defense evaluation record with itemized criterion scores and the calculated total numerical grade.
 
 ---
 
-### DC-FR-06: Verdict Selection & Score Finalization
+### DC-FR-06: Evaluation Finalization & Numerical Score Submission
 *Traceable to: Global `FR-DC-04`*
 
-- **User Story:** As a Defense Committee member, I want to submit a final verdict along with the score so that the student's internship outcome is formally documented.
+- **User Story:** As a Defense Committee member, I want to finalize and submit my numerical evaluation so that the student's official defense marks are securely transmitted to the department.
 - **Detailed Description:**
-  - Evaluators select a formal defense verdict:
-    - `Pass`: Meets or exceeds all requirements.
-    - `Pass with Minor Revisions`: Defense acceptable; minor documentation updates required within 7 days.
-    - `Major Revisions / Re-defense`: Project or report inadequate; requires re-defense in a future session.
-    - `Fail`: Unsatisfactory performance.
+  - Evaluators review their itemized numerical scores and total calculated mark prior to final submission.
   - Submission Modes:
-    - **Save as Draft:** Allows editing score inputs during the defense session.
-    - **Final Submit:** Locks the score sheet. Once submitted, scores become immutable and can only be amended with formal Department Head authorization.
+    - **Save as Draft:** Saves partial or working numerical scores during the defense presentation, allowing further edits.
+    - **Final Submission:** Locks the evaluation sheet. Once submitted, the numerical marks become immutable, preventing further modification without explicit Department Head authorization.
 - **Acceptance Criteria (QA):**
-  - [ ] Cannot submit final score sheet without filling all rubric criteria.
-  - [ ] Once finalized, form inputs become read-only.
-  - [ ] Consolidated score is calculated and transmitted to the Department Head grading portal.
+  - [ ] Cannot submit final evaluation without filling valid numerical scores for all active department rubric criteria.
+  - [ ] Numerical scores strictly reject values less than 0 or greater than the maximum specified by the rubric.
+  - [ ] Upon final submission, the score sheet transitions to a read-only state.
+  - [ ] The submitted numerical grade is recorded and transmitted to the Department Head for final grade consolidation.
 
 ---
 
@@ -156,14 +151,22 @@ The Defense Committee module operates on the following core conceptual models:
                                   │ id                   │
                                   │ scheduleId           │
                                   │ evaluatorId (Faculty)│
-                                  │ presentationScore    │
-                                  │ technicalScore       │
-                                  │ demoScore            │
-                                  │ qnaScore             │
-                                  │ totalScore           │
-                                  │ verdict (PASS/FAIL)  │
+                                  │ totalScore (Numeric) │
                                   │ remarks              │
-                                  │ isFinalized          │
+                                  │ isFinalized (Boolean)│
+                                  │ submittedAt          │
+                                  └──────────┬───────────┘
+                                             │ 1
+                                             │
+                                             │ *
+                                  ┌──────────┴───────────┐
+                                  │    CriterionScore    │
+                                  │──────────────────────│
+                                  │ id                   │
+                                  │ evaluationId         │
+                                  │ criterionName        │
+                                  │ scoreAwarded(Numeric)│
+                                  │ maxScore (Numeric)   │
                                   └──────────────────────┘
 ```
 
@@ -172,8 +175,8 @@ The Defense Committee module operates on the following core conceptual models:
 ## 4. Business Rules & Constraints
 
 1. **Role Access Restriction:** Only authenticated faculty members designated as `DEFENSE_COMMITTEE` or `DEPARTMENT_HEAD` can access evaluation scoring forms.
-2. **Panel Independence:** If multiple committee members evaluate the same student, each member submits an independent evaluation score sheet. The system calculates the average score for department consolidation.
-3. **Score Immutability:** Once a committee member clicks "Final Submit", the score cannot be edited via the UI. Any change requires an audit trail authorized by the Department Head.
+2. **Numerical Scoring Standard:** Committee members award numerical scores based on the department rubric. The system calculates and aggregates the numerical scores submitted by committee members for departmental grade compilation.
+3. **Score Immutability:** Once a committee member clicks "Final Submission", the score cannot be edited via the UI. Any modification requires an audit trail authorized by the Department Head.
 4. **Prerequisite Check:** A student cannot be evaluated unless their final report has been approved by their academic mentor.
 
 ---
@@ -186,5 +189,5 @@ The Defense Committee module operates on the following core conceptual models:
 | **DC-FR-02** (Candidate Schedule) | `FR-DC-03`, `FR-ST-11` | Defense Committee | P0 (Critical) |
 | **DC-FR-03** (Deliverables & Document Review) | `FR-DC-02`, `FR-ST-04` | Defense Committee | P0 (Critical) |
 | **DC-FR-04** (Candidate Attendance Verification) | `FR-DC-03`, `FR-DH-09` | Defense Committee | P1 (High) |
-| **DC-FR-05** (Standardized Rubric Scoring) | `FR-DC-04` | Defense Committee | P0 (Critical) |
-| **DC-FR-06** (Verdict & Score Finalization) | `FR-DC-04`, `FR-DH-06` | Defense Committee | P0 (Critical) |
+| **DC-FR-05** (Department Rubric Evaluation & Numerical Scoring) | `FR-DC-04` | Defense Committee | P0 (Critical) |
+| **DC-FR-06** (Evaluation Finalization & Numerical Score Submission) | `FR-DC-04`, `FR-DH-06` | Defense Committee | P0 (Critical) |
